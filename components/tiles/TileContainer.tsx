@@ -11,8 +11,11 @@ export function TileContainer() {
   const camera = useRef(null);
 
   return (
-    <div id="canvas-container">
-      <Canvas style={{ background: '#272730'}}>
+    <div id="canvas-container" style={{
+        width: "100%",
+        height: "100%",
+    }}>
+      <Canvas style={{ background: '#272730', width: "100%", height: "100%"}}>
         <PerspectiveCamera ref={camera}>
           <ErrorBoundary fallbackRender={() => (
             <mesh>
