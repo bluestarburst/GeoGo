@@ -1,6 +1,7 @@
 import { Loader3DTiles, LoaderProps, Runtime } from 'three-loader-3dtiles'
 import { useLoader, useThree, useFrame } from '@react-three/fiber'
 import { Loader, Vector2, WebGLRenderer } from 'three'
+import { useEffect } from 'react'
 
 class Loader3DTilesBridge extends Loader {
     props: LoaderProps = {
@@ -53,6 +54,15 @@ function Loader3DTilesR3FAsset(props: any) {
     const { model, runtime } = useLoader(Loader3DTilesBridge, props.url, (loader: Loader3DTilesBridge) => {
         loader.setProps(loaderProps);
     })
+
+    useEffect(() => {
+        if (!runtime) return;
+        runtime.orientToGeocoord({
+            lat: Number(32.781311113132396), // 32.781311113132396, -96.79762963384655
+            long: Number(-96.79762963384655),
+            height: Number(270)
+        });
+    }, [runtime])
 
     useFrame(({ size, camera }, dt) => {
         runtime.update(dt, camera);
