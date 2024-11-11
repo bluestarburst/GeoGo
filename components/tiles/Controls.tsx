@@ -23,7 +23,7 @@ export function Controls({
   const moveUp = useRef(false);
   const moveDown = useRef(false);
 
-  const { camera } = useThree();
+  const { camera, scene } = useThree();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -85,6 +85,10 @@ export function Controls({
 
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
+
+
+    // add fog to the scene
+    scene.fog = new THREE.Fog("#E7E8D7", 100, 1000);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);

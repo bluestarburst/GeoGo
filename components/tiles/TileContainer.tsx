@@ -5,12 +5,15 @@ import {
     PerspectiveCamera,
     OrbitControls,
     PointerLockControls,
+    Plane,
 } from "@react-three/drei";
 import { ErrorBoundary } from "react-error-boundary";
-import { Matrix4, Euler } from "three";
+import { Matrix4, Euler, Fog } from "three";
 
 import { Loader3DTilesR3FAsset } from "./GoogleTiles";
 import { Controls } from "./Controls";
+import { SkyBox } from "./Skybox";
+import { Image } from "react-native";
 
 export function TileContainer() {
     const camera = useRef(null);
@@ -23,8 +26,10 @@ export function TileContainer() {
                 height: "100%",
             }}
         >
+            {/* <Image source={require('@/assets/images/skybox/px.png')} /> */}
             <Canvas style={{ background: "#272730", width: "100%", height: "100%" }}>
                 <Controls cameraRef={camera}>
+                    <SkyBox />
                     <PerspectiveCamera ref={camera}>
                         <ErrorBoundary
                             fallbackRender={() => (
@@ -42,6 +47,8 @@ export function TileContainer() {
                                     </mesh>
                                 }
                             >
+                                {/* <Plane args={[100000, 100000]} rotation={new Euler(-Math.PI / 2, 0, 0)} position={[0, -200, 0]} /> */}
+
                                 <group rotation={new Euler(Math.PI / 2, 0, 0)}>
                                     <Loader3DTilesR3FAsset
 
