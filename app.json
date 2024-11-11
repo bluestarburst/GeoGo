@@ -24,17 +24,12 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png",
-      "basePath": "/geogo",
-      "experiments": {
-        "baseUrl": "/geogo"
-      }
+      "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
       "expo-router"
     ],
     "experiments": {
-      "baseUrl": "/geogo",
       "typedRoutes": true
     }
   }
