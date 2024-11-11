@@ -3,9 +3,6 @@ import { useEffect } from "react";
 import { Image } from "react-native";
 import { loadCubeTextureAsync, TextureLoader } from "expo-three";
 
-const px = require('@/assets/images/skybox/px.png');
-
-import px2 from '@/assets/images/skybox/px.png';
 import { CubeTexture, CubeTextureLoader } from "three";
 
 
