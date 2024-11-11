@@ -6,8 +6,6 @@ import {
   PointerLockControls,
 } from "@react-three/drei";
 
-import * as THREE from "three";
-
 export function Controls({
   children,
   cameraRef,
