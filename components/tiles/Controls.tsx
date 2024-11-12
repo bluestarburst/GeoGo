@@ -85,13 +85,6 @@ export function Controls({
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
 
-
-    // add fog to the scene
-    scene.fog = new THREE.Fog("#E7E8D7", 100, 1000);
-    const light = new THREE.DirectionalLight(0xffffff, 10);
-    light.position.set(0, 0, 10);
-    scene.add(light);
-
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);

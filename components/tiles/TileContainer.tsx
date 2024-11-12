@@ -29,7 +29,7 @@ export function TileContainer() {
             {/* <Image source={require('@/assets/images/skybox/px.png')} /> */}
             <Canvas style={{ background: "#272730", width: "100%", height: "100%" }}>
                 <Controls cameraRef={camera}>
-                    <SkyBox />
+                    <SkyBox currentSkybox="sunrise" />
                     <PerspectiveCamera ref={camera}>
                         <ErrorBoundary
                             fallbackRender={() => (
