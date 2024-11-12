@@ -1,7 +1,8 @@
 import { Loader3DTiles, LoaderProps, Runtime } from 'three-loader-3dtiles'
 import { useLoader, useThree, useFrame } from '@react-three/fiber'
-import { Loader, Vector2, WebGLRenderer } from 'three'
+import { Loader, MeshToonMaterial, Vector2, WebGLRenderer } from 'three'
 import { useEffect } from 'react'
+import { TextureLoader, THREE } from 'expo-three'
 
 class Loader3DTilesBridge extends Loader {
     props: LoaderProps = {
@@ -40,12 +41,23 @@ class Loader3DTilesBridge extends Loader {
 
 function Loader3DTilesR3FAsset(props: any) {
     const threeState = useThree();
+
+    const threeTone = new TextureLoader().load(require('@/assets/images/threeTone.jpg'));
+    threeTone.minFilter = THREE.NearestFilter
+    threeTone.magFilter = THREE.NearestFilter
+
+    const material = new MeshToonMaterial({
+        color: "white",
+        gradientMap: threeTone,
+    });
+
     const loaderProps = {
         url: "",
         renderer: threeState.gl,
         viewport: getViewport(threeState.gl),
         options: {
-            ...props
+            ...props,
+            // material
         }
     }
 
@@ -70,7 +82,7 @@ function Loader3DTilesR3FAsset(props: any) {
 
     return (
         <group {...props} dispose={runtime.dispose}>
-            <primitive object={model} />
+            <primitive object={model} material={material} />
         </group>
     )
 }

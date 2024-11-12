@@ -5,6 +5,24 @@ import { loadCubeTextureAsync, TextureLoader } from "expo-three";
 
 import { CubeTexture, CubeTextureLoader } from "three";
 
+const day = [
+    require('@/assets/images/skybox/day/px.png'),
+    require('@/assets/images/skybox/day/nx.png'),
+    require('@/assets/images/skybox/day/py.png'),
+    require('@/assets/images/skybox/day/ny.png'),
+    require('@/assets/images/skybox/day/pz.png'),
+    require('@/assets/images/skybox/day/nz.png'),
+];
+
+const sunrise = [
+    require('@/assets/images/skybox/sunrise/px.png'),
+    require('@/assets/images/skybox/sunrise/nx.png'),
+    require('@/assets/images/skybox/sunrise/py.png'),
+    require('@/assets/images/skybox/sunrise/ny.png'),
+    require('@/assets/images/skybox/sunrise/pz.png'),
+    require('@/assets/images/skybox/sunrise/nz.png'),
+];
+
 
 // export function getLocalImgPath(path: string = ""): string {
 //     // return Image.resolveAssetSource(require(path)).uri;
@@ -14,6 +32,13 @@ import { CubeTexture, CubeTextureLoader } from "three";
 export function SkyBox() {
     const { scene } = useThree();
 
+    const configs = {
+        day: {
+            images: day,
+            light: ,
+        }
+    }
+
     async function loadTexture() {
 
         let ready = 0;
@@ -21,13 +46,8 @@ export function SkyBox() {
         function updateReady() {
             ready++;
         }
-        
-        const px = new TextureLoader().load(require('@/assets/images/skybox/px.png'), updateReady);
-        const nx = new TextureLoader().load(require('@/assets/images/skybox/nx.png'), updateReady);
-        const py = new TextureLoader().load(require('@/assets/images/skybox/py.png'), updateReady);
-        const ny = new TextureLoader().load(require('@/assets/images/skybox/ny.png'), updateReady);
-        const pz = new TextureLoader().load(require('@/assets/images/skybox/pz.png'), updateReady);
-        const nz = new TextureLoader().load(require('@/assets/images/skybox/nz.png'), updateReady);
+
+        const cubes = sunrise.map((path) => new TextureLoader().load(path, updateReady));
 
         while (ready < 6) {
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -37,15 +57,13 @@ export function SkyBox() {
         const loader = new CubeTextureLoader();
 
         const texture = loader.load([
-            px.image.src,
-            nx.image.src,
-            py.image.src,
-            ny.image.src,
-            pz.image.src,
-            nz.image.src,
+            cubes[0].image.src,
+            cubes[1].image.src,
+            cubes[2].image.src,
+            cubes[3].image.src,
+            cubes[4].image.src,
+            cubes[5].image.src,
         ]);
-
-        console.log('texture', texture, px.image.src);
 
         scene.background = texture;
 

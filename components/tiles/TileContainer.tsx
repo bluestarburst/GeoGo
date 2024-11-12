@@ -61,7 +61,7 @@ export function TileContainer() {
                                         rotation={new Euler(-Math.PI / 2, 0, 0)}
                                         googleApiKey={"AIzaSyAOsk3zgPK7ZQWWWa7VTjg2zvU6WMla27U"}
                                         // url="https://int.nyt.com/data/3dscenes/ONA360/TILESET/0731_FREEMAN_ALLEY_10M_A_36x8K__10K-PN_50P_DB/tileset_tileset.json"
-                                        url="https://tile.googleapis.com/v1/3dtiles/root.json"
+                                        url="https://tile.googleapis.com/v1/3dtiles/root.json?key=AIzaSyAOsk3zgPK7ZQWWWa7VTjg2zvU6WMla27U"
                                         maximumScreenSpaceError={48}
                                         resetTransform={true}
                                     />

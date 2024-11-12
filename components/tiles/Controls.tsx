@@ -5,6 +5,7 @@ import {
   OrbitControls,
   PointerLockControls,
 } from "@react-three/drei";
+import { THREE } from "expo-three";
 
 export function Controls({
   children,
@@ -87,6 +88,9 @@ export function Controls({
 
     // add fog to the scene
     scene.fog = new THREE.Fog("#E7E8D7", 100, 1000);
+    const light = new THREE.DirectionalLight(0xffffff, 10);
+    light.position.set(0, 0, 10);
+    scene.add(light);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -186,7 +190,7 @@ export function Controls({
     camera.translateX(posDx * xspeed);
     // translate camera up/down
     camera.translateY(-posDy * yspeed);
-    
+
 
   }, [camera, zoom, zooming, lastTouch.x, lastTouch.y]);
 
