@@ -12,7 +12,7 @@ export default function HomePage() {
             <div className="absolute top-0 left-0 w-full h-full">
                 <TileContainer />
             </div>
-            <div className="relative z-10">
+            <div className="relative z-10 w-full h-full flex justify-center items-center min-h-[100vh]">
                 <div className="p-5 flex flex-col gap-2">
                     <h1 className="text-6xl"><b>GeoGo</b></h1>
                     <Input className="w-full max-w-[350px]" type="location" label="Email" />
