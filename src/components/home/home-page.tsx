@@ -203,7 +203,7 @@ export default function HomePage() {
                 // }
 
                 // use quadratic function to make the velocity smoother and really slow at the end
-                velocity.current = Math.max(0.00001, velocity.current - Math.pow(velocity.current, 2) * 0.00001);
+                velocity.current = Math.max(0.000001, velocity.current - Math.pow(velocity.current, 2) * 0.000001);
 
                 newestCoords.current = {
                     lat: newestCoords.current.lat + (currentLocation.geometry.location.lat() - lastCoords.current.lat) * velocity.current,
@@ -221,7 +221,7 @@ export default function HomePage() {
                     range: range,
                     tilt: 65,
                 }));
-            }, 60 / 1000);
+            }, 30 / 1000);
 
         }
     }, [currentLocation]);
@@ -356,11 +356,11 @@ export default function HomePage() {
                 </div>
             </div>
 
-            <div className="absolute left-0 top-0 p-5 h-screen flex flex-col justify-center pointer-events-none">
-                <div className={cn("p-2 rounded-lg flex flex-row justify-center transition-transform items-center", showingHint && interrupting && !moving ? "translate-x-[0%]" : "translate-x-[-97%]")}>
-                    <div className="bg-white p-2 rounded-lg flex flex-row justify-center items-center gap-1 pointer-events-auto">
-                        <div className="flex flex-col justify-center items-center gap-2 w-max">
-                            <Image src={currentGame.img} alt="Google Maps" className="object-fill w-max max-h-[400px] w-full rounded-lg" />
+            <div className="absolute left-0 top-0 p-5 h-screen w-screen max-w-full flex flex-col justify-center items-start pointer-events-none">
+                <div className={cn("p-2 rounded-lg flex flex-row max-w-full justify-center transition-transform items-center", showingHint && interrupting && !moving ? "translate-x-[0%]" : "translate-x-[-97%]")}>
+                    <div className="bg-white max-w-full p-2 rounded-lg flex flex-row justify-center items-center gap-1 pointer-events-auto">
+                        <div className="flex flex-col justify-center items-center gap-2 w-max max-w-full">
+                            <Image src={currentGame.img} alt="Google Maps" className="object-fill w-max max-h-[400px] max-w-full rounded-lg" />
                             <div className="flex flex-row justify-between w-full">
                                 <p className="text-black">{didWin ? "You found it!" : "Use the map to find the exact location of this image!"}</p>
                                 <p className="text-black">{getDistanceFromLatLonInKm(viewProps.center.lat, viewProps.center.lng, currentGame.lat, currentGame.lng).toFixed(2)}km away</p>
