@@ -27,7 +27,7 @@ export const AutocompleteCustom = ({ onPlaceSelect, setPredictionResults, select
     const [placesService, setPlacesService] =
         useState<google.maps.places.PlacesService | null>(null);
 
-    
+
 
     const [inputValue, setInputValue] = useState<string>('');
 
@@ -111,8 +111,9 @@ export const AutocompleteCustom = ({ onPlaceSelect, setPredictionResults, select
     }, [selectedPlaceId]);
 
     return (
-        <div className="autocomplete-container">
+        <div className="autocomplete-container w-full">
             <Input
+                fullWidth
                 value={inputValue}
                 onInput={(event: FormEvent<HTMLInputElement>) => onInputChange(event)}
                 placeholder="Search for a place"

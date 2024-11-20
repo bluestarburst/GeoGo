@@ -1,15 +1,24 @@
 // import * as ReactDOM from 'react-dom/client'
-import { useRef, Suspense, useEffect, useState } from "react";
+import { useRef, Suspense, useEffect, useState, useCallback } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
     PerspectiveCamera,
 } from "@react-three/drei";
 import { ErrorBoundary } from "react-error-boundary";
-import { Euler } from "three";
 
-import { Loader3DTilesR3FAsset } from "./GoogleTiles";
+// import { Loader3DTilesR3FAsset } from "./GoogleTiles";
 import { Controls } from "./Controls";
 import { SkyBox } from "./Skybox";
+import { Map3D, Map3DCameraProps } from "../map-3d";
+// import { MapMouseEvent } from "@vis.gl/react-google-maps";
+
+const INITIAL_VIEW_PROPS = {
+    center: { lat: 37.72809, lng: -119.64473, altitude: 1300 },
+    range: 5000,
+    heading: 61,
+    tilt: 69,
+    roll: 0
+};
 
 export function TileContainer({
     lat,
@@ -18,6 +27,20 @@ export function TileContainer({
     lat: number;
     lng: number;
 }) {
+
+    const [viewProps, setViewProps] = useState(INITIAL_VIEW_PROPS);
+
+    const handleCameraChange = useCallback((props: Map3DCameraProps) => {
+        setViewProps(oldProps => ({ ...oldProps, ...props }));
+    }, []);
+
+    // const handleMapClick = useCallback((ev: MapMouseEvent) => {
+    //     if (!ev.detail.latLng) return;
+
+    //     const { lat, lng } = ev.detail.latLng;
+    //     setViewProps(p => ({ ...p, center: { lat, lng, altitude: 0 } }));
+    // }, []);
+
     const camera = useRef(null);
 
     const [reset, setReset] = useState(true);
@@ -42,6 +65,7 @@ export function TileContainer({
                 height: "100%",
             }}
         >
+            
             {/* <Image source={require('@/assets/images/skybox/px.png')} /> */}
             <Canvas style={{ background: "#272730", width: "100%", height: "100%" }}>
                 <Controls cameraRef={camera}>
@@ -65,9 +89,9 @@ export function TileContainer({
                             >
                                 {/* <Plane args={[100000, 100000]} rotation={new Euler(-Math.PI / 2, 0, 0)} position={[0, -200, 0]} /> */}
 
-                                <group rotation={new Euler(Math.PI / 2, 0, 0)}>
-                                    <Loader3DTilesR3FAsset
-
+                                {/* <group rotation={new Euler(Math.PI / 2, 0, 0)}>
+                                    {!reset && <Loader3DTilesR3FAsset
+                                        key={lat + lng}
                                         dracoDecoderPath={
                                             "https://unpkg.com/three@0.160.0/examples/jsm/libs/draco"
                                         }
@@ -82,8 +106,9 @@ export function TileContainer({
                                         resetTransform={true}
                                         lat={lat}
                                         lng={lng}
-                                    />
-                                </group>
+                                    />}
+                                </group> */}
+                                
                             </Suspense>
                         </ErrorBoundary>
                     </PerspectiveCamera>

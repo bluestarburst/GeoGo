@@ -20,8 +20,8 @@ export function Controls({
   const moveUp = useRef(false);
   const moveDown = useRef(false);
 
-  const orbit = useRef(true);
-  const orbitCenter = useRef(new THREE.Vector3(0, 0, -250));
+  const orbit = useRef(false);
+  const orbitCenter = useRef(new THREE.Vector3(0, 100, 0));
   const orbitYOffset = useRef(50);
   const orbitRadius = useRef(100);
 
@@ -97,8 +97,6 @@ export function Controls({
   useFrame((state, delta) => {
 
     if (orbit.current) {
-
-      const cam = camera;
 
       const angle = Date.now() * 0.0001;
       const x = Math.cos(angle) * orbitRadius.current;
@@ -263,7 +261,7 @@ export function Controls({
 
   return (
     <>
-      <PointerLockControls enabled={false} onUnlock={(_: any) => {
+      <PointerLockControls enabled={!orbit} onUnlock={(_: any) => {
         moveForward.current = false;
         moveBackward.current = false;
         moveLeft.current = false;

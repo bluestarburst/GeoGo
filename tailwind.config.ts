@@ -10,6 +10,10 @@ export default {
   ],
   theme: {
     extend: {
+      screens: {
+        phone: "200px",
+        desktop: "800px",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -19,9 +23,17 @@ export default {
           "0%": { maxWidth: "0" },
           "100%": { maxWidth: "100vw" },
         },
+        growHeight: {
+          "0%": { maxHeight: "0" },
+          "100%": { maxHeight: "100vh" },
+        },
         shrinkWidth: {
           "0%": { maxWidth: "100vw" },
           "100%": { maxWidth: "0" },
+        },
+        shrinkHeight: {
+          "0%": { maxHeight: "100vh" },
+          "100%": { maxHeight: "0" },
         },
         fadeUp: {
           "0%": { opacity: "0", transform: "translateY(20px)" },
@@ -30,7 +42,9 @@ export default {
       },
       animation: {
         growWidth: "growWidth 0.85s ease-in-out",
+        growHeight: "growHeight 0.85s ease-in-out",
         shrinkWidth: "shrinkWidth 0.85s ease-in-out",
+        shrinkHeight: "shrinkHeight 0.85s ease-in-out",
         fadeUp: "fadeUp 0.85s ease-in-out",
       },
     },

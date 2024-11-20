@@ -92,6 +92,7 @@ function Loader3DTilesR3FAsset(props: any) {
         </group>
     )
 }
+
 function getViewport(renderer: WebGLRenderer) {
     const viewSize = renderer.getSize(new Vector2());
     return {
