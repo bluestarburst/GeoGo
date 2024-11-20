@@ -75,14 +75,14 @@ function Loader3DTilesR3FAsset(props: any) {
     useEffect(() => {
         if (!runtime) return;
         runtime.orientToGeocoord({
-            lat: Number(32.781311113132396), // 32.781311113132396, -96.79762963384655
-            long: Number(-96.79762963384655),
+            lat: Number(props.lat ?? 32.781311113132396), // 32.781311113132396, -96.79762963384655
+            long: Number(props.long ?? -96.79762963384655),
             height: Number(270)
         });
     }, [runtime])
 
     useFrame(({ size, camera }, dt) => {
-        console.log("Updating runtime", size);
+        // console.log("Updating runtime", size);
         runtime.update(dt, camera);
     });
 

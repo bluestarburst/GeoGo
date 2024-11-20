@@ -1,5 +1,5 @@
 // import * as ReactDOM from 'react-dom/client'
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import {
     PerspectiveCamera,
@@ -11,8 +11,28 @@ import { Loader3DTilesR3FAsset } from "./GoogleTiles";
 import { Controls } from "./Controls";
 import { SkyBox } from "./Skybox";
 
-export function TileContainer() {
+export function TileContainer({
+    lat,
+    lng,
+}: {
+    lat: number;
+    lng: number;
+}) {
     const camera = useRef(null);
+
+    const [reset, setReset] = useState(true);
+
+    useEffect(() => {
+        console.log("New Lat and Lng", lat, lng);
+        setReset(true);
+    }, [lat, lng]);
+
+    useEffect(() => {
+        if (!reset) return;
+        setTimeout(() => {
+            setReset(false);
+        }, 1000);
+    }, [reset]);
 
     return (
         <div
@@ -60,6 +80,8 @@ export function TileContainer() {
                                         url="https://tile.googleapis.com/v1/3dtiles/root.json?key=AIzaSyAOsk3zgPK7ZQWWWa7VTjg2zvU6WMla27U"
                                         maximumScreenSpaceError={48}
                                         resetTransform={true}
+                                        lat={lat}
+                                        lng={lng}
                                     />
                                 </group>
                             </Suspense>

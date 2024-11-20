@@ -14,6 +14,25 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      keyframes: {
+        growWidth: {
+          "0%": { maxWidth: "0" },
+          "100%": { maxWidth: "100vw" },
+        },
+        shrinkWidth: {
+          "0%": { maxWidth: "100vw" },
+          "100%": { maxWidth: "0" },
+        },
+        fadeUp: {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      animation: {
+        growWidth: "growWidth 0.85s ease-in-out",
+        shrinkWidth: "shrinkWidth 0.85s ease-in-out",
+        fadeUp: "fadeUp 0.85s ease-in-out",
+      },
     },
   },
   darkMode: "class",
