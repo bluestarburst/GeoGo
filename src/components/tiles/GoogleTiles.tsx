@@ -82,6 +82,7 @@ function Loader3DTilesR3FAsset(props: any) {
     }, [runtime])
 
     useFrame(({ size, camera }, dt) => {
+        console.log("Updating runtime", size);
         runtime.update(dt, camera);
     });
 

@@ -18,6 +18,7 @@
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-error-boundary": "^4.1.2",
+    "react-places-autocomplete": "^7.3.0",
     "three": "^0.170.0",
     "three-loader-3dtiles": "^1.2.7"
   },

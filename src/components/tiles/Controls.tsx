@@ -1,8 +1,6 @@
-import { useState, useEffect, useRef, Suspense, useCallback } from "react";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
 import {
-  PerspectiveCamera,
-  OrbitControls,
   PointerLockControls,
 } from "@react-three/drei";
 import * as THREE from "three";
@@ -265,7 +263,7 @@ export function Controls({
 
   return (
     <>
-      <PointerLockControls onUnlock={_ => {
+      <PointerLockControls enabled={false} onUnlock={(_: any) => {
         moveForward.current = false;
         moveBackward.current = false;
         moveLeft.current = false;

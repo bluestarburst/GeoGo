@@ -1,14 +1,11 @@
 // import * as ReactDOM from 'react-dom/client'
-import { useState, useEffect, useRef, Suspense } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { useRef, Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
 import {
     PerspectiveCamera,
-    OrbitControls,
-    PointerLockControls,
-    Plane,
 } from "@react-three/drei";
 import { ErrorBoundary } from "react-error-boundary";
-import { Matrix4, Euler, Fog } from "three";
+import { Euler } from "three";
 
 import { Loader3DTilesR3FAsset } from "./GoogleTiles";
 import { Controls } from "./Controls";
