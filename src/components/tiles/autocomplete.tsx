@@ -1,19 +1,23 @@
 import React, { useEffect, useState, useCallback, FormEvent } from 'react';
 import { useMap, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { Input } from '@nextui-org/react';
+import { NavigationIcon } from 'lucide-react';
 
 interface Props {
     onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
     setPredictionResults: (results: Array<google.maps.places.AutocompletePrediction>) => void;
     selectedPlaceId?: string | null;
     setCurrentLocation: (place: google.maps.places.PlaceResult | null) => void;
+    disabled: boolean;
 }
 
 // This is a custom built autocomplete component using the "Autocomplete Service" for predictions
 // and the "Places Service" for place details
-export const AutocompleteCustom = ({ onPlaceSelect, setPredictionResults, selectedPlaceId, setCurrentLocation }: Props) => {
+export const AutocompleteCustom = ({ onPlaceSelect, setPredictionResults, selectedPlaceId, setCurrentLocation, disabled }: Props) => {
     const map = useMap();
     const places = useMapsLibrary('places');
+
+    const [attemptLocation, setAttemptLocation] = useState<boolean>(false);
 
     // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompleteSessionToken
     const [sessionToken, setSessionToken] =
@@ -110,13 +114,46 @@ export const AutocompleteCustom = ({ onPlaceSelect, setPredictionResults, select
         handleSuggestionClick(selectedPlaceId);
     }, [selectedPlaceId]);
 
+    useEffect(() => {
+        if (attemptLocation) {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    console.log("Latitude is :", position.coords.latitude);
+                    console.log("Longitude is :", position.coords.longitude);
+                    setAttemptLocation(false);
+
+                    const place: google.maps.places.PlaceResult = {
+                        geometry: {
+                            location: new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+                        },
+                        formatted_address: 'Current Location'
+                    };
+
+                    setCurrentLocation(place);
+
+                });
+            } else {
+                /* geolocation IS NOT available */
+            }
+        }
+    }, [attemptLocation]);
+
     return (
         <div className="autocomplete-container w-full">
             <Input
+                disabled={disabled}
                 fullWidth
                 value={inputValue}
                 onInput={(event: FormEvent<HTMLInputElement>) => onInputChange(event)}
                 placeholder="Search for a place"
+                endContent={
+                    <NavigationIcon
+                        className='text-black/50'
+                        size={20}
+                        onClick={() => setAttemptLocation(true)}
+                        style={{ cursor: 'pointer' }}
+                    />
+                }
             />
         </div>
     );

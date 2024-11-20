@@ -35,7 +35,7 @@ export function useDebouncedEffect(
   timeout: number,
   deps: DependencyList
 ) {
-  const timerRef = useRef(0);
+  const timerRef = useRef<NodeJS.Timeout | number | null>(null);
 
   useEffect(
     () => {

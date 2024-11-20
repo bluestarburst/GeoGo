@@ -26,6 +26,8 @@ export default function HomePage() {
 
     const [showLabels, setShowLabels] = useState(true);
 
+    const [moving, setMoving] = useState(false);
+
     const handleCameraChange = useCallback((props: Map3DCameraProps) => {
         setViewProps(oldProps => ({ ...oldProps, ...props }));
     }, []);
@@ -40,6 +42,10 @@ export default function HomePage() {
     const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
 
     const [currentLocation, setCurrentLocation] = useState<google.maps.places.PlaceResult | null>(null);
+    const [lastLocation, setLastLocation] = useState<google.maps.places.PlaceResult | null>(null);
+
+    const newestCoords = useRef({ lat: INITIAL_VIEW_PROPS.center.lat, lng: INITIAL_VIEW_PROPS.center.lng });
+    const lastCoords = useRef({ lat: INITIAL_VIEW_PROPS.center.lat, lng: INITIAL_VIEW_PROPS.center.lng, range: INITIAL_VIEW_PROPS.range });
 
     const [predictionResults, setPredictionResults] = useState<
         Array<google.maps.places.AutocompletePrediction>
@@ -47,18 +53,85 @@ export default function HomePage() {
 
     useEffect(() => {
         if (currentLocation) {
-            const timeout = setTimeout(() => {
-                setViewProps(p => ({
-                    ...p, center: {
-                        lat: currentLocation.geometry.location.lat(),
-                        lng: currentLocation.geometry.location.lng(),
-                        altitude: 0
-                    }
-                }));
-                setInterrupting(null);
+            if (lastLocation) {
+                lastCoords.current = {
+                    lat: lastLocation.geometry.location.lat(),
+                    lng: lastLocation.geometry.location.lng(),
+                    range: viewProps.range
+                };
+            }
+
+            setInterrupting(true);
+            setMoving(true);
+
+            velocity.current = 0;
+            setTimeout(() => {
+                console.log('interrupting');
+                setInterrupting(true);
             }, 100);
 
-            setInterrupting(timeout);
+            // the longer the distance, the larger the max range
+            const maxRange = Math.max(
+                Math.abs(currentLocation.geometry.location.lat() - lastCoords.current.lat),
+                Math.abs(currentLocation.geometry.location.lng() - lastCoords.current.lng)
+            ) * 10000;
+
+            const timeout = setInterval(() => {
+                // move towards the current location
+
+                const percent = 1 - Math.abs(newestCoords.current.lat - currentLocation.geometry.location.lat()) / Math.abs(lastCoords.current.lat - currentLocation.geometry.location.lat());
+
+                console.log(percent);
+
+
+                // const range = Math.max((1 - (Math.abs(0.4 - percent) / 0.4)) * maxRange, 400)
+                // make the curve smoother by using a quadratic function
+                const range = Math.max((1 - Math.pow(Math.abs(0.4 - percent) / 0.4, 2)) * maxRange, 400)
+
+
+                const altitude = Math.max((1 - (Math.abs(0.5 - percent) / 0.5)) * 1000, 200);
+                // make altitude smoother by using a quadratic function
+                // const altitude = Math.max((1 - Math.pow(Math.abs(0.5 - percent) / 0.5, 2)) * 1000, 200);
+
+                console.log('percent', percent, 'range', range);
+
+                // if newestCoords is close enough to currentLocation, stop
+                if (
+                    Math.abs(newestCoords.current.lat - currentLocation.geometry.location.lat()) < 0.025 &&
+                    Math.abs(newestCoords.current.lng - currentLocation.geometry.location.lng()) < 0.025
+                ) {
+                    setLastLocation(currentLocation);
+                    clearInterval(timeout);
+                    setMoving(false);
+                    setInterrupting(false);
+                    return;
+                }
+
+                // if (velocity.current < 0.000000001) {
+                //     velocity.current += velocity.current * 0.01;
+                // }
+
+                // use quadratic function to make the velocity smoother and really slow at the end
+                velocity.current = Math.max(0.00001, velocity.current - Math.pow(velocity.current, 2) * 0.00001);
+
+                newestCoords.current = {
+                    lat: newestCoords.current.lat + (currentLocation.geometry.location.lat() - lastCoords.current.lat) * velocity.current,
+                    lng: newestCoords.current.lng + (currentLocation.geometry.location.lng() - lastCoords.current.lng) * velocity.current
+                };
+
+                console.log('range', range);
+
+                setViewProps(p => ({
+                    ...p, center: {
+                        lat: newestCoords.current.lat,
+                        lng: newestCoords.current.lng,
+                        altitude: altitude,
+                    },
+                    range: range,
+                    tilt: 65,
+                }));
+            }, 60 / 1000);
+
         }
     }, [currentLocation]);
 
@@ -67,11 +140,9 @@ export default function HomePage() {
 
     useEffect(() => {
         // increment heading by 1 every 100ms
-        if (interrupting) {
-
+        if (interrupting || moving) {
             velocity.current = 0.01;
             return;
-
         }
 
         const interval = setInterval(() => {
@@ -83,11 +154,12 @@ export default function HomePage() {
         }, 60 / 1000);
 
         return () => clearInterval(interval);
-    }, [interrupting, velocity]);
+    }, [interrupting, velocity, moving]);
 
     const onInterrupt = useCallback(() => {
+        console.log(viewProps);
         setInterrupting(true);
-    }, [interrupting]);
+    }, [interrupting, viewProps]);
 
     const onUninterrupt = useCallback(() => {
         setInterrupting(false);
@@ -119,10 +191,11 @@ export default function HomePage() {
                         <div className="p-5 flex flex-col gap-2 pointer-events-auto">
                             <h1 className={cn("text-6xl transition-opacity", interrupting ? "opacity-0 pointer-events-none h-0" : "")}><b>GeoGo</b></h1>
                             <div
-                            className="w-[400px] max-w-full"
+                                className="w-[400px] max-w-full"
                                 onClick={onUninterrupt}
                             >
                                 <AutocompleteCustom
+                                    disabled={moving}
                                     onPlaceSelect={setCurrentLocation} setPredictionResults={setPredictionResults} selectedPlaceId={selectedPlaceId} setCurrentLocation={setCurrentLocation} />
                             </div>
                             <p className={cn("text-2xl transition-opacity", interrupting ? "opacity-0 pointer-events-none" : "")}>Explore the world in 3D</p>
