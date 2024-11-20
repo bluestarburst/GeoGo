@@ -1,4 +1,4 @@
-import { useMapsLibrary } from '@vis.gl/react-google-maps';
+import {useMapsLibrary} from '@vis.gl/react-google-maps';
 import React, {
   ForwardedRef,
   forwardRef,
@@ -6,8 +6,8 @@ import React, {
   useImperativeHandle,
   useState
 } from 'react';
-import { useMap3DCameraEvents } from './use-map-3d-camera-events';
-import { useCallbackRef, useDeepCompareEffect } from '../utility-hooks';
+import {useMap3DCameraEvents} from './use-map-3d-camera-events';
+import {useCallbackRef, useDeepCompareEffect} from '../utility-hooks';
 
 import './map-3d-types';
 
@@ -46,7 +46,7 @@ export const Map3D = forwardRef(
       });
     }, []);
 
-    const { center, heading, tilt, range, roll, ...map3dOptions } = props;
+    const {center, heading, tilt, range, roll, ...map3dOptions} = props;
 
     useDeepCompareEffect(() => {
       if (!map3DElement) return;
@@ -66,19 +66,18 @@ export const Map3D = forwardRef(
 
     return (
       <>
-        <gmp-map-3d
-          defaultLabelsDisabled={false}
-          ref={map3dRef}
-          center={center}
-          range={range}
-          heading={heading}
-          tilt={tilt}
-          roll={roll}>
-
+      <gmp-map-3d
+        ref={map3dRef}
+        center={center}
+        range={range}
+        heading={heading}
+        tilt={tilt}
+        roll={roll}>
+          
         </gmp-map-3d>
-
+      
       </>
-
+      
     );
   }
 );
