@@ -1,9 +1,9 @@
-import { useLoader, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 
 import * as THREE from "three";
 
-import { CubeTexture, CubeTextureLoader } from "three";
+import { CubeTextureLoader } from "three";
 
 import sunrisePx from "@/assets/images/skybox/sunrise/px.png";
 import sunriseNx from "@/assets/images/skybox/sunrise/nx.png";
